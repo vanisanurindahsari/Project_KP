@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard Monitoring UMKM</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=1" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+  <header>
+    <div class="logo">Dinas Koperasi dan UKM</div>
+    <div class="tanggal">24 April 2024 14:35</div>
+  </header>
+
+  <main>
+    <h1>Dashboard Monitoring UMKM & Perdagangan Kota Surabaya</h1>
+
+    <!-- Summary Boxes -->
+    <section class="summary-boxes">
+      <div class="box">4,520<br /><span>UMKM Aktif</span></div>
+      <div class="box">1,220<br /><span>Izin Koperasi Disetujui</span></div>
+      <div class="box">102<br /><span>Komoditas Dipantau</span></div>
+      <div class="box">15<br /><span>Laporan Masalah</span></div>
+    </section>
+
+    <!-- Chart Section -->
+    <section class="charts">
+      <div class="chart">
+        <h3>Tren Pertumbuhan UMKM</h3>
+        <canvas id="umkmChart"></canvas>
+      </div>
+
+      <div class="chart">
+        <h3>Jenis Usaha UMKM</h3>
+        <canvas id="jenisUsahaChart"></canvas>
+      </div>
+
+      <div class="chart">
+        <h3>Kategori UMKM</h3>
+        <canvas id="kategoriPieChart"></canvas>
+      </div>
+
+      <div class="chart">
+        <h3>Status Pengajuan UMKM</h3>
+        <label for="bulanSelect">Pilih Bulan:</label>
+        <select id="bulanSelect">
+          <option value="jan">Januari</option>
+          <option value="feb">Februari</option>
+          <option value="mar">Maret</option>
+          <option value="apr" selected>April</option>
+          <option value="mei">Mei</option>
+          <option value="jun">Juni</option>
+        </select>
+        <canvas id="statusPengajuanChart"></canvas>
+      </div>
+
+      <div class="chart">
+        <h3>Peta Kegiatan</h3>
+        <div id="petaKegiatan" style="height: 300px; border-radius: 10px;"></div>
+      </div>
+    </section>
+
+    <!-- Buttons -->
+    <section class="actions">
+      <button>Ajukan Izin Koperasi/UMKM</button>
+      <button>Lihat Data Harga Pasar</button>
+      <button>Laporkan Masalah</button>
+    </section>
+  </main>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Script -->
+  <script src="{{ url_for('static', filename='js/script.js') }}?v=1"></script>
+</body>
+</html>
