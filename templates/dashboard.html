@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard Monitoring UMKM</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=1" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+  <header>
+    <!-- Logo di kiri -->
+    <div class="logo">
+      <img src="{{ url_for('static', filename='img/logo-dinas-pendidikan-surabaya.jpg') }}" alt="Logo Dinas">
+
+      <span></span>
+    </div>
+
+    <!-- Judul di tengah -->
+    <div class="judul">
+      <h1>Dinas Koperasi dan UKM</h1>
+    </div>
+
+    <!-- Tanggal otomatis di kanan -->
+    <div class="tanggal" id="tanggalSekarang"></div>
+  </header>
+
+  <main>
+    <h1>Dashboard Monitoring UMKM & Perdagangan Kota Surabaya</h1>
+
+    <!-- Summary Boxes -->
+<section class="summary-boxes">
+  <!-- Klik UMKM Aktif dan angka dari Flask -->
+  <a href="{{ url_for('umkm_aktif') }}" class="box" style="text-decoration: none;">
+    <div>
+      <h2 style="color: blue;">{{ total_aktif }}</h2>
+      <span style="color: gray;">UMKM Aktif</span>
+    </div>
+  </a>
+
+  <!-- Box lainnya masih statis (boleh nanti dijadikan dinamis juga) -->
+  <div class="box">
+    <h2>1,220</h2>
+    <span>Izin Koperasi Disetujui</span>
+  </div>
+
+  <div class="box">
+    <h2>102</h2>
+    <span>Komoditas Dipantau</span>
+  </div>
+
+  <div class="box">
+    <h2>15</h2>
+    <span>Laporan Masalah</span>
+  </div>
+</section>
+
+
+
+    <!-- Chart Section -->
+    <section class="charts">
+      <div class="chart">
+        <h3>Tren Pertumbuhan UMKM</h3>
+        <canvas id="umkmChart"></canvas>
+      </div>
+
+      <div class="chart">
+        <h3>Jenis Usaha UMKM</h3>
+        <canvas id="jenisUsahaChart"></canvas>
+      </div>
+
+      <div class="chart">
+        <h3>Kategori UMKM</h3>
+        <canvas id="kategoriPieChart"></canvas>
+      </div>
+
+      <div class="chart">
+        <h3>Status Pengajuan UMKM</h3>
+        <label for="bulanSelect">Pilih Bulan:</label>
+        <select id="bulanSelect">
+          <option value="jan">Januari</option>
+          <option value="feb">Februari</option>
+          <option value="mar">Maret</option>
+          <option value="apr" selected>April</option>
+          <option value="mei">Mei</option>
+          <option value="jun">Juni</option>
+        </select>
+        <canvas id="statusPengajuanChart"></canvas>
+      </div>
+
+      <div class="chart">
+        <h3>Peta Kegiatan</h3>
+        <div id="petaKegiatan" style="height: 300px; border-radius: 10px;"></div>
+      </div>
+    </section>
+
+    <!-- Buttons -->
+    <section class="actions">
+      <button>Ajukan Izin Koperasi/UMKM</button>
+      <button>Lihat Data Harga Pasar</button>
+      <button>Laporkan Masalah</button>
+    </section>
+  </main>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Script -->
+  <script src="{{ url_for('static', filename='js/script.js') }}?v=1"></script>
+
+  <!-- Script untuk tanggal -->
+  <script>
+    function updateTanggalSekarang() {
+      const bulan = [
+        "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+        "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+      ];
+      const hari = [
+        "Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"
+      ];
+      const now = new Date();
+      const namaHari = hari[now.getDay()];
+      const tanggal = now.getDate();
+      const namaBulan = bulan[now.getMonth()];
+      const tahun = now.getFullYear();
+      const jam = now.getHours().toString().padStart(2, '0');
+      const menit = now.getMinutes().toString().padStart(2, '0');
+
+      document.getElementById('tanggalSekarang').innerText =
+        `${namaHari}, ${tanggal} ${namaBulan} ${tahun} ${jam}:${menit}`;
+    }
+
+    updateTanggalSekarang();
+    setInterval(updateTanggalSekarang, 60000); // update setiap 1 menit
+  </script>
+</body>
+</html>
+
