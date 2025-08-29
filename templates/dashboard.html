@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard Monitoring UMKM</title>
 
   <!-- CSS -->
@@ -14,18 +15,17 @@
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
+
 <body>
   <header>
     <!-- Logo di kiri -->
     <div class="logo">
       <img src="{{ url_for('static', filename='img/logo-dinas-pendidikan-surabaya.jpg') }}" alt="Logo Dinas">
-
-      <span></span>
     </div>
 
     <!-- Judul di tengah -->
     <div class="judul">
-      <h1>Dinas Koperasi dan UKM</h1>
+      <h1>Dinas Koperasi Usaha Kecil dan Menengah dan Perdagangan</h1>
     </div>
 
     <!-- Tanggal otomatis di kanan -->
@@ -33,54 +33,52 @@
   </header>
 
   <main>
-    <h1>Dashboard Monitoring UMKM & Perdagangan Kota Surabaya</h1>
 
     <!-- Summary Boxes -->
-<section class="summary-boxes">
-  <!-- Klik UMKM Aktif dan angka dari Flask -->
-  <a href="{{ url_for('umkm_aktif') }}" class="box" style="text-decoration: none;">
-    <div>
-      <h2 style="color: blue;">{{ total_aktif }}</h2>
-      <span style="color: gray;">UMKM Aktif</span>
-    </div>
-  </a>
+    <section class="summary-boxes">
+      <!-- Izin Koperasi -->
+      <a href="{{ url_for('koperasi_disetujui') }}" class="box" style="text-decoration: none;">
+        <div>
+          <h2 style="color: blue;">{{ izin_koperasi_disetujui }}</h2>
+          <span>Izin Koperasi Disetujui</span>
+        </div>
+      </a>
 
-  <!-- Box lainnya masih statis (boleh nanti dijadikan dinamis juga) -->
-  <div class="box">
-    <h2>1,220</h2>
-    <span>Izin Koperasi Disetujui</span>
-  </div>
+      <!-- UMKM Aktif -->
+      <a href="{{ url_for('daftar_umkm') }}" class="box" style="text-decoration: none;">
+        <div>
+          <h2 style="color: blue;">{{ "{:,}".format(total_aktif) }}</h2>
+          <span style="color: gray;">UMKM Aktif</span>
+        </div>
+      </a>
 
-  <div class="box">
-    <h2>102</h2>
-    <span>Komoditas Dipantau</span>
-  </div>
-
-  <div class="box">
-    <h2>15</h2>
-    <span>Laporan Masalah</span>
-  </div>
-</section>
-
-
+      <!-- Komoditas Dipantau -->
+      <a href="{{ url_for('komoditas') }}" class="box" style="text-decoration: none;">
+        <div style="text-align: center;">
+        <div style="font-size: 36px; color: #0000FF; margin-top: 26px;">
+            {{ 15 }}
+          </div>
+          <h2 style="color: #0000FF;">{{ total_komoditas }}</h2>
+          <span style="font-weight: 700; color: #808080;">Komoditas Dipantau</span>
+        </div>
+      </a>
+    </section> <!-- ✅ tutup summary-boxes -->
 
     <!-- Chart Section -->
     <section class="charts">
+      <!-- Tren Pertumbuhan UMKM -->
       <div class="chart">
-        <h3>Tren Pertumbuhan UMKM</h3>
+        <h3>Intervensi UMKM sesuai LPPD</h3>
         <canvas id="umkmChart"></canvas>
       </div>
 
+      <!-- Jenis Usaha UMKM -->
       <div class="chart">
         <h3>Jenis Usaha UMKM</h3>
         <canvas id="jenisUsahaChart"></canvas>
       </div>
 
-      <div class="chart">
-        <h3>Kategori UMKM</h3>
-        <canvas id="kategoriPieChart"></canvas>
-      </div>
-
+      <!-- Status Pengajuan UMKM -->
       <div class="chart">
         <h3>Status Pengajuan UMKM</h3>
         <label for="bulanSelect">Pilih Bulan:</label>
@@ -95,28 +93,117 @@
         <canvas id="statusPengajuanChart"></canvas>
       </div>
 
+      <!-- Kategori UMKM -->
       <div class="chart">
-        <h3>Peta Kegiatan</h3>
-        <div id="petaKegiatan" style="height: 300px; border-radius: 10px;"></div>
+        <h3>Kategori UMKM</h3>
+        <canvas id="kategoriPieChart"></canvas>
       </div>
     </section>
 
-    <!-- Buttons -->
-    <section class="actions">
-      <button>Ajukan Izin Koperasi/UMKM</button>
-      <button>Lihat Data Harga Pasar</button>
-      <button>Laporkan Masalah</button>
-    </section>
   </main>
 
-  <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- ================== SCRIPT ================== -->
 
-  <!-- Script -->
-  <script src="{{ url_for('static', filename='js/script.js') }}?v=1"></script>
-
-  <!-- Script untuk tanggal -->
   <script>
+    // Chart Tren Pertumbuhan UMKM
+    const umkmCtx = document.getElementById('umkmChart').getContext('2d');
+    const umkmChart = new Chart(umkmCtx, {
+      type: 'line',
+      data: {
+        labels: {{ tahun|default([2021, 2022, 2023, 2024, 2025]) | tojson }},
+        datasets: [{
+          label: 'Jumlah UMKM',
+          data: {{ jumlah|default([50, 42, 370, 450, 250]) | tojson }},
+          borderColor: '#007bff',
+          backgroundColor: 'rgba(0,123,255,0.2)',
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'top' } },
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+
+    // Chart Jenis Usaha UMKM
+    const jenisCtx = document.getElementById('jenisUsahaChart').getContext('2d');
+    const jenisChart = new Chart(jenisCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Kuliner', 'Fashion', 'Kerajinan', 'Jasa', 'Pertanian'],
+        datasets: [{
+          data: [10, 20, 30, 40, 50],
+          backgroundColor: ['#007bff', '#28a745', '#ffc107', '#17a2b8', '#dc3545'],
+          borderColor: '#fff',
+          borderWidth: 2,
+          hoverOffset: 10
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'bottom' } },
+        cutout: '50%'
+      }
+    });
+
+    // Chart Status Pengajuan UMKM
+    const statusCtx = document.getElementById('statusPengajuanChart').getContext('2d');
+    let statusPengajuanChart = new Chart(statusCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Diterima', 'Pending', 'Ditolak'],
+        datasets: [{
+          label: 'Jumlah Pengajuan',
+          data: [10, 5, 3], // default
+          backgroundColor: ['#28a745', '#ffc107', '#dc3545']
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+
+    // Event listener ganti bulan
+    document.getElementById('bulanSelect').addEventListener('change', function () {
+      const bulan = this.value;
+      let dataBulan;
+      switch (bulan) {
+        case 'jan': dataBulan = [10, 3, 2]; break;
+        case 'feb': dataBulan = [12, 4, 1]; break;
+        case 'mar': dataBulan = [14, 5, 2]; break;
+        case 'apr': dataBulan = [15, 5, 3]; break;
+        case 'mei': dataBulan = [16, 4, 2]; break;
+        case 'jun': dataBulan = [18, 3, 2]; break;
+        default: dataBulan = [0, 0, 0];
+      }
+      statusPengajuanChart.data.datasets[0].data = dataBulan;
+      statusPengajuanChart.update();
+    });
+
+    // Chart Kategori UMKM
+    const kategoriCtx = document.getElementById('kategoriPieChart').getContext('2d');
+    const kategoriPieChart = new Chart(kategoriCtx, {
+      type: 'pie',
+      data: {
+        labels: ['Mikro', 'Kecil', 'Menengah'],
+        datasets: [{
+          data: [50, 30, 20],
+          backgroundColor: ['#007bff', '#28a745', '#ffc107'],
+          borderColor: '#fff',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'bottom' } }
+      }
+    });
+
+    // ================== Tanggal ==================
     function updateTanggalSekarang() {
       const bulan = [
         "Januari", "Februari", "Maret", "April", "Mei", "Juni",
@@ -138,8 +225,12 @@
     }
 
     updateTanggalSekarang();
-    setInterval(updateTanggalSekarang, 60000); // update setiap 1 menit
+    setInterval(updateTanggalSekarang, 60000); // update tiap 1 menit
   </script>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Script utama -->
+  <script src="{{ url_for('static', filename='js/script.js') }}?v=1"></script>
 </body>
 </html>
-

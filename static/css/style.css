@@ -7,7 +7,7 @@ body {
 }
 
 header {
-  background-color: #1d4ed8;
+  background-color: #1e3a8a;
   color: white;
   padding: 20px;
   display: flex;
@@ -19,7 +19,7 @@ header {
   display: flex;         /* Biar gambar & teks sejajar */
   align-items: center;   /* Vertikal sejajar */
   gap: 10px;             /* Jarak antara gambar & teks */
-  font-size: 20px;
+  font-size: 10px;
   font-weight: bold;
 }
 
@@ -57,6 +57,13 @@ main h1 {
   font-weight: bold;
   color: #1d4ed8;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* animasi hover */
+  cursor: pointer; 
+
+  /* Tambahan untuk cegah box jadi panjang */
+  height: auto;        /* biar sesuai konten */
+  min-height: 120px;   /* kasih batas minimum */
+  max-height: 180px;   /* batasi tinggi maksimal */
 }
 
 .summary-boxes .box span {
@@ -96,13 +103,6 @@ main h1 {
   margin-bottom: 15px;
 }
 
-/* Peta Kegiatan */
-#petaKegiatan {
-  height: 300px;
-  border-radius: 10px;
-  margin-top: 10px;
-}
-
 /* Action Buttons */
 .actions {
   display: flex;
@@ -133,8 +133,7 @@ main h1 {
     flex-direction: column;
     align-items: flex-start;
   }
-
-  .logo {
+.logo {
     margin-bottom: 10px;
   }
 
@@ -144,5 +143,5 @@ main h1 {
 
   .summary-boxes {
     grid-template-columns: 1fr;
-  }
+}
 }

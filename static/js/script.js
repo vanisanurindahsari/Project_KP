@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const umkmCanvas = document.getElementById('umkmChart');
   if (umkmCanvas) {
     const umkmCtx = umkmCanvas.getContext('2d');
+    fetch('umkm.php')
     new Chart(umkmCtx, {
       type: 'bar',
       data: {

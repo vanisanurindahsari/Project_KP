@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UMKM Aktif</title>
+</head>
+<body>
+    <h1>Daftar UMKM Aktif</h1>
+    <table border="1" cellpadding="5">
+        <tr>
+            <th>No</th>
+            <th>Nama Pemilik</th>
+            <th>Nama UMKM</th>
+            <th>NIK</th>
+            <th>Alamat</th>
+            <th>Produk</th>
+            <th>Status</th>
+        </tr>
+        {% for umkm in data_umkm %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ umkm.nama }}</td>
+            <td>{{ umkm.nama_umkm }}</td>
+            <td>{{ umkm.nik }}</td>
+            <td>{{ umkm.alamat }}</td>
+            <td>{{ umkm.produk }}</td>
+            <td>{{ umkm.status }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

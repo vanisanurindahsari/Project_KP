@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Data Izin Koperasi</title>
+</head>
+<body>
+    <h1>Daftar Izin Koperasi</h1>
+
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Tahun</th>
+            <th>Jumlah Disetujui</th>
+        </tr>
+        {% for row in data %}
+        <tr>
+            <td>{{ row.id }}</td>
+            <td>{{ row.tahun }}</td>
+            <td>{{ row.jumlah_disetujui }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
