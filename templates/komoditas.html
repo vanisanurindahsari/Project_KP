@@ -1,0 +1,37 @@
+<<!DOCTYPE html>
+<html>
+<head>
+  <title>Daftar Komoditas Dipantau</title>
+  <style>
+    h2 {
+      text-align: center; /* judul ke tengah */
+    }
+    table {
+      margin: 0 auto;     /* tabel ke tengah */
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 8px 12px;
+      border: 1px solid black;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h2>Daftar Komoditas Dipantau</h2>
+  <table border="1" cellpadding="5" cellspacing="2">
+    <tr>
+      <th>ID</th>
+      <th>Nama Komoditas</th>
+    </tr>
+    {% for item in data %}
+    <tr>
+      <td>{{ item.id }}</td>
+      <td>{{ item.nama_komoditas }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</body>
+</html>
+
+

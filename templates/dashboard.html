@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="id">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Monitoring UMKM</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}?v=1" />
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  </head>
+
+  <body>
+    <header>
+      <!-- Logo di kiri -->
+      <div class="logo">
+        <img
+          src="{{ url_for('static', filename='img/logo-dinas-pendidikan-surabaya.jpg') }}"
+          alt="Logo Dinas">
+      </div>
+
+      <!-- Judul di tengah -->
+      <div class="judul">
+        <h1>Dinas Koperasi Usaha Kecil dan Menengah dan Perdagangan Kota</h1>
+      </div>
+
+      <!-- Tanggal otomatis di kanan -->
+      <div class="tanggal" id="tanggalSekarang"></div>
+    </header>
+
+    <main>
+
+      <!-- Summary Boxes -->
+      <section class="summary-boxes">
+        <!-- Izin Koperasi -->
+        <a href="{{ url_for('koperasi_disetujui') }}" class="box"
+          style="text-decoration: none;">
+          <div>
+            <h2 style="color: blue;">{{ izin_koperasi_disetujui }}</h2>
+            <span>Jumlah UMKM</span>
+          </div>
+        </a>
+
+        <!-- UMKM Aktif -->
+        <a href="{{ url_for('daftar_umkm') }}" class="box"
+          style="text-decoration: none;">
+          <div>
+            <h2 style="color: blue;">{{ "{:,}".format(total_aktif) }}</h2>
+            <span style="color: gray;">Jumlah UMKM binaan</span>
+          </div>
+        </a>
+
+        <!-- Komoditas Dipantau -->
+        <a href="{{ url_for('komoditas') }}" class="box"
+          style="text-decoration: none;">
+          <div style="text-align: center;">
+            <div style="font-size: 36px; color: #0000FF; margin-top: 26px;">
+              {{ 15 }}
+            </div>
+            <h2 style="color: #0000FF;">{{ total_komoditas }}</h2>
+            <span style="font-weight: 700; color: #808080;">Jumlah UMKM yang
+              memiliki Sertifikasi Halal</span>
+          </div>
+        </a>
+
+        <a href="{{ url_for('komoditas') }}" class="box"
+          style="text-decoration: none;">
+          <div style="text-align: center;">
+            <div style="font-size: 36px; color: #0000FF; margin-top: 26px;">
+              {{ 15 }}
+            </div>
+            <h2 style="color: #0000FF;">{{ total_komoditas }}</h2>
+            <span style="font-weight: 700; color: #808080;">Jumlah UMKM yang
+              memiliki Sertifikasi Merek</span>
+          </div>
+        </a>
+
+        <a href="{{ url_for('komoditas') }}" class="box"
+          style="text-decoration: none;">
+          <div style="text-align: center;">
+            <div style="font-size: 36px; color: #0000FF; margin-top: 26px;">
+              {{ 15 }}
+            </div>
+            <h2 style="color: #0000FF;">{{ total_komoditas }}</h2>
+            <span style="font-weight: 700; color: #808080;">Jumlah UMKM yang
+              telah ber-NIB</span>
+          </div>
+        </a>
+
+        <a href="{{ url_for('komoditas') }}" class="box"
+          style="text-decoration: none;">
+          <div style="text-align: center;">
+            <div style="font-size: 36px; color: #0000FF; margin-top: 26px;">
+              {{ 15 }}
+            </div>
+            <h2 style="color: #0000FF;">{{ total_komoditas }}</h2>
+            <span style="font-weight: 700; color: #808080;">Jumlah UMKM yang
+              telah masuk Peken</span>
+          </div>
+        </a>
+
+        <a href="{{ url_for('komoditas') }}" class="box"
+          style="text-decoration: none;">
+          <div style="text-align: center;">
+            <div style="font-size: 36px; color: #0000FF; margin-top: 26px;">
+              {{ 15 }}
+            </div>
+            <h2 style="color: #0000FF;">{{ total_komoditas }}</h2>
+            <span style="font-weight: 700; color: #808080;">Jumlah Pedagang
+              SWK</span>
+          </div>
+        </a>
+
+        <a href="{{ url_for('komoditas') }}" class="box"
+          style="text-decoration: none;">
+          <div style="text-align: center;">
+            <div style="font-size: 36px; color: #0000FF; margin-top: 26px;">
+              {{ 15 }}
+            </div>
+            <h2 style="color: #0000FF;">{{ total_komoditas }}</h2>
+            <span style="font-weight: 700; color: #808080;">Jumlah stan SWK yang
+              belum terisi</span>
+          </div>
+        </a>
+
+        <a href="{{ url_for('komoditas') }}" class="box"
+          style="text-decoration: none;">
+          <div style="text-align: center;">
+            <div style="font-size: 36px; color: #0000FF; margin-top: 26px;">
+              {{ 15 }}
+            </div>
+            <h2 style="color: #0000FF;">{{ total_komoditas }}</h2>
+            <span style="font-weight: 700; color: #808080;">Jumlah UMKM yang
+              telah bermitra dengan HORECA, Toko Swalayan</span>
+          </div>
+        </a>
+
+        <a href="{{ url_for('komoditas') }}" class="box"
+          style="text-decoration: none;">
+          <div style="text-align: center;">
+            <div style="font-size: 36px; color: #0000FF; margin-top: 26px;">
+              {{ 15 }}
+            </div>
+            <h2 style="color: #0000FF;">{{ total_komoditas }}</h2>
+            <span style="font-weight: 700; color: #808080;">Jumlah Kategori
+              Produk UMKM</span>
+          </div>
+        </a>
+
+        <a href="{{ url_for('komoditas') }}" class="box"
+          style="text-decoration: none;">
+          <div style="text-align: center;">
+            <div style="font-size: 36px; color: #0000FF; margin-top: 26px;">
+              {{ 15 }}
+            </div>
+            <h2 style="color: #0000FF;">{{ total_komoditas }}</h2>
+            <span style="font-weight: 700; color: #808080;">Jumlah UMKM yang
+              telah diintervensi</span>
+          </div>
+        </a>
+
+        <a href="{{ url_for('komoditas') }}" class="box"
+          style="text-decoration: none;">
+          <div style="text-align: center;">
+            <div style="font-size: 36px; color: #0000FF; margin-top: 26px;">
+              {{ 15 }}
+            </div>
+            <h2 style="color: #0000FF;">{{ total_komoditas }}</h2>
+            <span style="font-weight: 700; color: #808080;">Jumlah Koprasi
+              Aktif</span>
+          </div>
+        </a>
+
+        <a href="{{ url_for('komoditas') }}" class="box"
+          style="text-decoration: none;">
+          <div style="text-align: center;">
+            <div style="font-size: 36px; color: #0000FF; margin-top: 26px;">
+              {{ 15 }}
+            </div>
+            <h2 style="color: #0000FF;">{{ total_komoditas }}</h2>
+            <span style="font-weight: 700; color: #808080;">Jumlah Koprasi Tidak
+              Aktif</span>
+          </div>
+        </a>
+
+        <a href="{{ url_for('komoditas') }}" class="box"
+          style="text-decoration: none;">
+          <div style="text-align: center;">
+            <div style="font-size: 36px; color: #0000FF; margin-top: 26px;">
+              {{ 15 }}
+            </div>
+            <h2 style="color: #0000FF;">{{ total_komoditas }}</h2>
+            <span style="font-weight: 700; color: #808080;">Jumlah Koprasi yang
+              telah diintervensi padat karya</span>
+          </div>
+        </a>
+
+      </section> <!-- ✅ tutup summary-boxes -->
+
+      <!-- Chart Section -->
+      <section class="charts">
+        <!-- Tren Pertumbuhan UMKM -->
+        <div class="chart">
+          <h3>Intervensi UMKM sesuai LPPD</h3>
+          <canvas id="umkmChart"></canvas>
+        </div>
+
+        <!-- Jenis Usaha UMKM -->
+        <div class="chart">
+          <h3>Jenis Usaha UMKM</h3>
+          <canvas id="jenisUsahaChart"></canvas>
+        </div>
+
+        <!-- Status Pengajuan UMKM -->
+        <div class="chart">
+          <h3>Status Pengajuan UMKM</h3>
+          <label for="bulanSelect">Pilih Bulan:</label>
+          <select id="bulanSelect">
+            <option value="jan">Januari</option>
+            <option value="feb">Februari</option>
+            <option value="mar">Maret</option>
+            <option value="apr" selected>April</option>
+            <option value="mei">Mei</option>
+            <option value="jun">Juni</option>
+          </select>
+          <canvas id="statusPengajuanChart"></canvas>
+        </div>
+
+        <!-- Kategori UMKM -->
+        <div class="chart">
+          <h3>Kategori UMKM</h3>
+          <canvas id="kategoriPieChart"></canvas>
+        </div>
+      </section>
+
+    </main>
+
+    <script>
+    // Chart Tren Pertumbuhan UMKM
+    const umkmCtx = document.getElementById('umkmChart').getContext('2d');
+    const umkmChart = new Chart(umkmCtx, {
+      type: 'line',
+      data: {
+        labels: {{ tahun|default([2021, 2022, 2023, 2024, 2025]) | tojson }},
+        datasets: [{
+          label: 'Jumlah UMKM',
+          data: {{ jumlah|default([50, 42, 370, 450, 250]) | tojson }},
+          borderColor: '#007bff',
+          backgroundColor: 'rgba(0,123,255,0.2)',
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'top' } },
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+
+    // Chart Jenis Usaha UMKM
+    const jenisCtx = document.getElementById('jenisUsahaChart').getContext('2d');
+    const jenisChart = new Chart(jenisCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Kuliner', 'Fashion', 'Kerajinan', 'Jasa', 'Pertanian'],
+        datasets: [{
+          data: [10, 20, 30, 40, 50],
+          backgroundColor: ['#007bff', '#28a745', '#ffc107', '#17a2b8', '#dc3545'],
+          borderColor: '#fff',
+          borderWidth: 2,
+          hoverOffset: 10
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'bottom' } },
+        cutout: '50%'
+      }
+    });
+
+    // Chart Status Pengajuan UMKM
+    const statusCtx = document.getElementById('statusPengajuanChart').getContext('2d');
+    let statusPengajuanChart = new Chart(statusCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Diterima', 'Pending', 'Ditolak'],
+        datasets: [{
+          label: 'Jumlah Pengajuan',
+          data: [10, 5, 3], // default
+          backgroundColor: ['#28a745', '#ffc107', '#dc3545']
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+
+    // Event listener ganti bulan
+    document.getElementById('bulanSelect').addEventListener('change', function () {
+      const bulan = this.value;
+      let dataBulan;
+      switch (bulan) {
+        case 'jan': dataBulan = [10, 3, 2]; break;
+        case 'feb': dataBulan = [12, 4, 1]; break;
+        case 'mar': dataBulan = [14, 5, 2]; break;
+        case 'apr': dataBulan = [15, 5, 3]; break;
+        case 'mei': dataBulan = [16, 4, 2]; break;
+        case 'jun': dataBulan = [18, 3, 2]; break;
+        default: dataBulan = [0, 0, 0];
+      }
+      statusPengajuanChart.data.datasets[0].data = dataBulan;
+      statusPengajuanChart.update();
+    });
+
+    // Chart Kategori UMKM
+    const kategoriCtx = document.getElementById('kategoriPieChart').getContext('2d');
+    const kategoriPieChart = new Chart(kategoriCtx, {
+      type: 'pie',
+      data: {
+        labels: ['Mikro', 'Kecil', 'Menengah'],
+        datasets: [{
+          data: [50, 30, 20],
+          backgroundColor: ['#007bff', '#28a745', '#ffc107'],
+          borderColor: '#fff',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'bottom' } }
+      }
+    });
+
+    // Tanggal 
+    function updateTanggalSekarang() {
+      const bulan = [
+        "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+        "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+      ];
+      const hari = [
+        "Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"
+      ];
+      const now = new Date();
+      const namaHari = hari[now.getDay()];
+      const tanggal = now.getDate();
+      const namaBulan = bulan[now.getMonth()];
+      const tahun = now.getFullYear();
+      const jam = now.getHours().toString().padStart(2, '0');
+      const menit = now.getMinutes().toString().padStart(2, '0');
+
+      document.getElementById('tanggalSekarang').innerText =
+        `${namaHari}, ${tanggal} ${namaBulan} ${tahun} ${jam}:${menit}`;
+    }
+
+    updateTanggalSekarang();
+    setInterval(updateTanggalSekarang, 60000); // update tiap 1 menit
+  </script>
+
+    <!-- ================== Tambahan Chart Section ================== -->
+    <section class="charts">
+      <!-- Intervensi Padat Karya -->
+      <div class="chart">
+        <h3>Intervensi Padat Karya</h3>
+        <canvas id="padatKaryaChart"></canvas>
+      </div>
+
+      <!-- Status Koperasi -->
+      <div class="chart">
+        <h3>Status Koperasi</h3>
+        <canvas id="statusKoperasiChart"></canvas>
+      </div>
+    </section>
+
+    <script>
+  // ================== Intervensi Padat Karya ==================
+  const padatKaryaCtx = document.getElementById('padatKaryaChart').getContext('2d');
+  const padatKaryaChart = new Chart(padatKaryaCtx, {
+    type: 'line',
+    data: {
+      labels: [2021, 2022, 2023, 2024, 2025], // tahun
+      datasets: [{
+        label: 'Jumlah Koperasi Intervensi',
+        data: [20, 50, 150, 200, 120], // contoh data, bisa diganti dari backend
+        borderColor: '#17a2b8',
+        backgroundColor: 'rgba(23,162,184,0.2)',
+        fill: true,
+        tension: 0.3
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { position: 'top' } },
+      scales: { y: { beginAtZero: true } }
+    }
+  });
+
+  // ================== Status Koperasi ==================
+  const statusKoperasiCtx = document.getElementById('statusKoperasiChart').getContext('2d');
+  const statusKoperasiChart = new Chart(statusKoperasiCtx, {
+    type: 'pie',
+    data: {
+      labels: ['Aktif', 'Tidak Aktif'],
+      datasets: [{
+        data: [120, 30], // contoh data aktif & tidak aktif
+        backgroundColor: ['#28a745', '#dc3545'],
+        borderColor: '#fff',
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { position: 'bottom' } }
+    }
+  });
+</script>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Script utama -->
+    <script src="{{ url_for('static', filename='js/script.js') }}?v=1"></script>
+  </body>
+</html>
